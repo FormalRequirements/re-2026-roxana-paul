@@ -1,0 +1,30 @@
+name: Générer Documentation PEGS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-doc:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9' 
+
+      - name: Installer les dépendances
+        run: pip install markdown jinja2
+
+      - name: Lancer le script de génération
+        run: python build.py
+
+      - name: Sauvegarder l'artefact HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ma-Documentation-PEGS
+          path: document_pegs.html 
+          retention-days: 5
