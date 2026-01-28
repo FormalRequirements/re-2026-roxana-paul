@@ -1,4 +1,4 @@
-## S.2 Fonctionnalités
-* **Assemblage :** Concaténation des fichiers dans l'ordre G -> E -> S -> P.
-* **Table des matières :** Génération automatique des liens cliquables (ancres).
-* **Style :** Injection automatique du fichier CSS dans le HTML (pas de fichier CSS externe).
+## S.2 Functionality
+* **Continuous Monitoring:** The system continuously monitors the home environment for defined events.
+* **Automatic Dispatch:** The system selects the specific emergency service based on the event type (e.g., fire department for fire events).
+* **Visual Verification Integration:** The system accesses security camera feeds to verify alerts.

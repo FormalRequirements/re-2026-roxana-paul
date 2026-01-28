@@ -1,4 +1,5 @@
-## E.2 Contraintes Techniques
-* Le script doit fonctionner sous **Python 3.8+**.
-* Aucune connexion internet ne doit être requise pour la génération.
-* Le fichier HTML final doit être lisible sur Chrome et Firefox.
+## E.2 Components
+The system environment includes the following external elements:
+* **Smart Home Devices:** Used for automated responses.
+* **Security Cameras:** Used for visual verification.
+* **Emergency Services Infrastructure:** The communication channels to Police, Fire, and Ambulance.

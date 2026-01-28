@@ -1,7 +1,7 @@
 # S. System
 
-## S.1 Composants
-Le système est composé de trois modules :
-1.  **Reader :** Scanne les dossiers et lit les fichiers `.md`.
-2.  **Converter :** Transforme le Markdown en HTML.
-3.  **Builder :** Assemble le tout dans le template final.
+## S.1 Components
+The system consists of the following major components:
+* **Central Monitoring Unit:** (Implied) The core logic handling detection and alerting.
+* **Mobile Application:** For user interaction.
+* **Wearable Physical Controller:** A device (e.g., a watch) for continuous monitoring and fall detection.
