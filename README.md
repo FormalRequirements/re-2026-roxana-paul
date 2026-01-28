@@ -8,7 +8,7 @@ Nous travaillons en binôme sur un sujet commun afin de mettre en pratique les m
 
 ## Contexte du projet
 
-Le projet **Maison Intelligente** consiste à définir et formaliser les exigences d’un système de maison connectée. Dans notre cas nous nous pachons sur le systeme d'alarme. Le système de sécurité surveille le domicile en continu pour détecter les intrusions, les incendies ou les urgences médicales et alerter automatiquement les services de secours appropriés (police, pompiers, SAMU).
+Le projet **Maison Intelligente** consiste à définir et formaliser les exigences d’un système de maison connectée. Dans notre cas nous nous penchons sur le systeme d'alarme. Le système de sécurité surveille le domicile en continu pour détecter les intrusions, les incendies ou les urgences médicales et alerter automatiquement les services de secours appropriés (police, pompiers, SAMU).
 
 L’objectif principal est de produire une **documentation claire, structurée et exploitable**, décrivant les exigences du système selon le formalisme PEGS. Cette documentation est générée automatiquement à partir de fichiers **Markdown**, puis transformée en **HTML** (et potentiellement en PDF) via un script et une chaîne d’intégration continue.
 
