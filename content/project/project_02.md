@@ -1,2 +1,2 @@
 ## P.2 Imposed technical choices
-- **Platform:** Mobile application and Wearable controller (e.g., watch).
+- [P.2.1] **Platform:** Mobile application and Wearable controller (e.g., watch).

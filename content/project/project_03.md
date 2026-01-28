@@ -1,6 +1,6 @@
 ## P.3 Schedule and milestones
 
-The project schedule is driven by a strict deadline for the initial release.
+[P.3.1] The project schedule is driven by a strict deadline for the initial release.
 
 | Milestone | Date | Description |
 | :--- | :--- | :--- |

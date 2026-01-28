@@ -1,7 +1,7 @@
 # E. Environment
 
 ## E.1 Glossary
-The following terms are essential to the project domain:  
+[E.1.1] The following terms are essential to the project domain:  
 - **Home:** The physical location being monitored.  
 - **SecuritySystem:** The core system performing monitoring and alerting.  
 - **Event:** A critical occurrence requiring attention, specifically intrusions, fires, or medical emergencies.  

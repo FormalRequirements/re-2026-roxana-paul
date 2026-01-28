@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Spécifications PEGS</title>
+    <link rel="stylesheet" href="templates/style.css">
+    <style>
+        /* --- Style Général --- */
+body {
+    font-family: 'Times New Roman', Times, serif; /* Police classique "document" */
+    font-size: 12pt;
+    line-height: 1.6; /* Espacement confortable */
+    color: #333; /* Noir doux pour moins fatiguer les yeux */
+    
+    max-width: 210mm; /* Largeur d'une feuille A4 */
+    margin: 40px auto; /* Centré avec de l'espace autour */
+    padding: 20px;
+    background-color: white;
+}
+
+/* --- Titres --- */
+h1 {
+    font-family: Arial, Helvetica, sans-serif; /* Sans-serif pour les titres */
+    color: #000;
+    border-bottom: 2px solid #333; /* Soulignement épais */
+    padding-bottom: 10px;
+    margin-top: 50px;
+    page-break-before: always; /* Force une nouvelle page à l'impression */
+}
+
+/* On évite le saut de page pour le tout premier titre */
+h1:first-child {
+    page-break-before: auto;
+}
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #444;
+    border-bottom: 1px solid #ccc; /* Soulignement fin */
+    margin-top: 30px;
+}
+
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1em;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* --- Table des Matières (TOC) --- */
+/* --- Table des Matières (TOC) --- */
+.toc {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 20px;
+    margin-bottom: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Niveau 1 (Les gros titres) : Pas de marge à gauche */
+.toc > ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+/* Niveaux imbriqués (H2, H3...) : On ajoute l'indentation ici */
+.toc ul ul {
+    list-style-type: none; /* Toujours pas de puces */
+    padding-left: 30px;    /* <-- C'est cette ligne qui crée le décalage */
+    margin-top: 5px;
+}
+
+/* Style des liens */
+.toc a {
+    text-decoration: none;
+    color: #0056b3;
+    display: block; /* Prend toute la largeur, plus facile à lire */
+    padding: 2px 0;
+}
+
+.toc a:hover {
+    text-decoration: underline;
+    color: #003d82;
+}
+
+/* --- Tableaux (Ex: pour le Changelog) --- */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Bordures collées */
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #aaa;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #eee; /* Entête grise */
+    font-weight: bold;
+}
+
+/* --- Codes et Blocs --- */
+code {
+    background-color: #f4f4f4;
+    padding: 2px 5px;
+    font-family: "Courier New", Courier, monospace;
+}
+
+blockquote {
+    border-left: 4px solid #ddd;
+    margin-left: 0;
+    padding-left: 15px;
+    color: #666;
+    font-style: italic;
+}
+
+/* --- Impression --- */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    .toc {
+        border: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: black; /* Les liens s'impriment en noir */
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        
+        <div style="text-align:center; margin-bottom: 60px; padding-top:40px;">
+            <h1 style="border:none; font-size: 36pt;">Spécifications PEGS</h1>
+            <p style="font-size: 14pt;">Document d'Exigences du Projet</p>
+            <p>Généré le : <script>document.write(new Date().toLocaleDateString())</script></p>
+        </div>
+
+        <div class="toc">
+            <h2 style="margin-top:0;">Table des Matières</h2>
+            <div class="toc">
+<ul>
+<li><a href="#g-goals">G. Goals</a><ul>
+<li><a href="#g1-context-and-overall-objectives">G.1 Context and overall objectives</a></li>
+<li><a href="#g2-current-situation">G.2 Current situation</a></li>
+<li><a href="#g3-expected-benefits">G.3 Expected benefits</a></li>
+<li><a href="#g4-functionality-overview">G.4 Functionality overview</a></li>
+<li><a href="#g5-high-level-usage-scenarios">G.5 High-level usage scenarios</a></li>
+<li><a href="#g6-limitations-and-exclusions">G.6 Limitations and exclusions</a></li>
+<li><a href="#g7-stakeholders-and-requirements-sources">G.7 Stakeholders and requirements sources</a></li>
+</ul>
+</li>
+<li><a href="#e-environment">E. Environment</a><ul>
+<li><a href="#e1-glossary">E.1 Glossary</a></li>
+<li><a href="#e2-components">E.2 Components</a></li>
+<li><a href="#e3-constraints">E.3 Constraints</a></li>
+<li><a href="#e4-assumptions">E.4 Assumptions</a></li>
+<li><a href="#e5-effects">E.5 Effects</a></li>
+<li><a href="#e6-invariants">E.6 Invariants</a></li>
+</ul>
+</li>
+<li><a href="#s-system">S. System</a><ul>
+<li><a href="#s1-components">S.1 Components</a></li>
+<li><a href="#s2-functionality">S.2 Functionality</a></li>
+<li><a href="#s3-interfaces">S.3 Interfaces</a></li>
+<li><a href="#s4-detailed-usage-scenarios">S.4 Detailed usage scenarios</a></li>
+<li><a href="#s5-prioritization">S.5 Prioritization</a></li>
+<li><a href="#s6-verification-and-acceptance-criteria">S.6 Verification and acceptance criteria</a></li>
+</ul>
+</li>
+<li><a href="#p-project">P. Project</a><ul>
+<li><a href="#p1-roles-and-personnel">P.1 Roles and personnel</a></li>
+<li><a href="#p2-imposed-technical-choices">P.2 Imposed technical choices</a></li>
+<li><a href="#p3-schedule-and-milestones">P.3 Schedule and milestones</a></li>
+<li><a href="#p4-tasks-and-deliverables">P.4 Tasks and deliverables</a></li>
+<li><a href="#p5-required-technology-elements">P.5 Required technology elements</a></li>
+<li><a href="#p6-risk-and-mitigation-analysis">P.6 Risk and mitigation analysis</a></li>
+<li><a href="#p7-requirements-process-and-report">P.7 Requirements process and report</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+        </div>
+
+        <div class="content">
+            <h1 id="g-goals">G. Goals</h1>
+<h2 id="g1-context-and-overall-objectives">G.1 Context and overall objectives</h2>
+<p>The "Maison Intelligente - Systeme d'alarme" is a security system designed to continuously monitor a home. Its primary objective is to detect specific critical events—intrusions, fires, or medical emergencies—and automatically alert the appropriate emergency services (police, fire department, ambulance). The system aims to ensure safety by providing 24/7 operational monitoring.</p>
+<h2 id="g2-current-situation">G.2 Current situation</h2>
+<h2 id="g3-expected-benefits">G.3 Expected benefits</h2>
+<p>The deployment of this system is expected to provide the following benefits:<br />
+- <strong>Automated Emergency Response:</strong> Automatic calling of police, fire, or ambulance services based on the specific type of event detected.<br />
+- <strong>Continuous Protection:</strong> The system guarantees 100% uptime for constant protection.<br />
+- <strong>Visual Verification:</strong> Integration with security cameras allows for visual verification of events.<br />
+- <strong>Personal Safety:</strong> Specific support for medical emergencies (e.g., falls) via wearable controllers.</p>
+<h2 id="g4-functionality-overview">G.4 Functionality overview</h2>
+<p>The system performs the following high-level functions:<br />
+- <strong>Event Monitoring:</strong> Detects intrusions, fires, and medical emergencies.<br />
+- <strong>Alerting:</strong> Automatically contacts the relevant emergency service upon detection.<br />
+- <strong>Integration:</strong> Connects with smart home devices for automated responses and security cameras for verification.<br />
+- <strong>Multi-location Support:</strong> Supports monitoring for multiple homes or properties for a single user.</p>
+<h2 id="g5-high-level-usage-scenarios">G.5 High-level usage scenarios</h2>
+<ul>
+<li><strong>Scenario 1 (Medical):</strong> A user wearing the physical controller experiences a fall. The system detects the medical emergency and immediately alerts the ambulance service.  </li>
+<li><strong>Scenario 2 (Intrusion):</strong> The system detects an intrusion. Within 10 seconds, the system alerts the police and uses security cameras for visual verification.</li>
+</ul>
+<h2 id="g6-limitations-and-exclusions">G.6 Limitations and exclusions</h2>
+<ul>
+<li><strong>False Alarm Rate:</strong> The system must maintain a false alarm rate of less than 1% per year.</li>
+</ul>
+<h2 id="g7-stakeholders-and-requirements-sources">G.7 Stakeholders and requirements sources</h2>
+<p>The primary stakeholders for this project include:<br />
+- <strong>Homeowners</strong><br />
+- <strong>Renters</strong><br />
+- <strong>Emergency Services:</strong> Police, Fire Department, and Ambulance services</p>
+<h1 id="e-environment">E. Environment</h1>
+<h2 id="e1-glossary">E.1 Glossary</h2>
+<p>[E.1.1] The following terms are essential to the project domain:<br />
+- <strong>Home:</strong> The physical location being monitored.<br />
+- <strong>SecuritySystem:</strong> The core system performing monitoring and alerting.<br />
+- <strong>Event:</strong> A critical occurrence requiring attention, specifically intrusions, fires, or medical emergencies.<br />
+- <strong>EmergencyService:</strong> External entities including Police, Fire Department, and Ambulance.<br />
+- <strong>SmartHomeDevice:</strong> External devices integrated for automated responses.<br />
+- <strong>SecurityCamera:</strong> Devices used for visual verification of events.<br />
+- <strong>User:</strong> The individual interacting with the system (Homeowner or Renter).</p>
+<h2 id="e2-components">E.2 Components</h2>
+<p>The system environment includes the following external elements:<br />
+- [E.2.1] <strong>Smart Home Devices:</strong> Used for automated responses.<br />
+- [E.2.2] <strong>Security Cameras:</strong> Used for visual verification.<br />
+- [E.2.3] <strong>Emergency Services Infrastructure:</strong> The communication channels to Police, Fire, and Ambulance.</p>
+<h2 id="e3-constraints">E.3 Constraints</h2>
+<p>The environment imposes the following strict constraints on the system:<br />
+- [E.3.1] <strong>Uptime:</strong> The system must maintain 100% uptime to ensure it is operational 24/7.<br />
+- [E.3.2] <strong>Response Time (Intrusion):</strong> Maximum 10 seconds to detect and alert.<br />
+- [E.3.3] <strong>Response Time (Fire):</strong> Maximum 5 seconds to detect and alert.<br />
+- [E.3.4] <strong>Response Time (Medical):</strong> Immediate response required.</p>
+<h2 id="e4-assumptions">E.4 Assumptions</h2>
+<ul>
+<li>[E.4.1] <em>Assumption:</em> Users with medical concerns will wear the physical controller (watch) to enable fall detection.</li>
+</ul>
+<h2 id="e5-effects">E.5 Effects</h2>
+<ul>
+<li>[E.5.1] The system will trigger actions in external Emergency Services (e.g., dispatching units).  </li>
+<li>[E.5.1] The system will trigger automated responses in connected Smart Home Devices.</li>
+</ul>
+<h2 id="e6-invariants">E.6 Invariants</h2>
+<ul>
+<li>[E.6.1] The false alarm rate must remain below 1% annually.</li>
+</ul>
+<h1 id="s-system">S. System</h1>
+<h2 id="s1-components">S.1 Components</h2>
+<p>The system consists of the following major components:<br />
+- <strong>Central Monitoring Unit:</strong> (Implied) The core logic handling detection and alerting.<br />
+- <strong>Mobile Application:</strong> For user interaction.<br />
+- <strong>Wearable Physical Controller:</strong> A device (e.g., a watch) for continuous monitoring and fall detection.</p>
+<h2 id="s2-functionality">S.2 Functionality</h2>
+<ul>
+<li><strong>Continuous Monitoring:</strong> The system continuously monitors the home environment for defined events.  </li>
+<li><strong>Automatic Dispatch:</strong> The system selects the specific emergency service based on the event type (e.g., fire department for fire events).  </li>
+<li><strong>Visual Verification Integration:</strong> The system accesses security camera feeds to verify alerts.</li>
+</ul>
+<h2 id="s3-interfaces">S.3 Interfaces</h2>
+<p>The system provides the following interfaces for users:<br />
+- <strong>Mobile App:</strong> A primary interface for user interaction.<br />
+- <strong>Wearable Controller:</strong> A physical interface (watch) designed to ensure continuous monitoring even if the user is incapacitated (e.g., falls).</p>
+<h2 id="s4-detailed-usage-scenarios">S.4 Detailed usage scenarios</h2>
+<h2 id="s5-prioritization">S.5 Prioritization</h2>
+<ul>
+<li><strong>Critical:</strong> Immediate alerting for medical emergencies.  </li>
+<li><strong>High:</strong> 5-second response for fire detection.  </li>
+<li><strong>High:</strong> 10-second response for intrusion detection.</li>
+</ul>
+<h2 id="s6-verification-and-acceptance-criteria">S.6 Verification and acceptance criteria</h2>
+<ul>
+<li><strong>Response Time Verification:</strong> The system shall be tested to ensure it meets the 5s (fire), 10s (intrusion), and immediate (medical) thresholds.  </li>
+<li><strong>Reliability Verification:</strong> The system must demonstrate &lt;1% false alarm rate over a year.  </li>
+<li><strong>Availability Verification:</strong> The system must be verified for 100% uptime.</li>
+</ul>
+<h1 id="p-project">P. Project</h1>
+<h2 id="p1-roles-and-personnel">P.1 Roles and personnel</h2>
+<ul>
+<li>[P.1.1] <strong>Requirements Engineers:</strong> Roxana &amp; Paul.</li>
+</ul>
+<h2 id="p2-imposed-technical-choices">P.2 Imposed technical choices</h2>
+<ul>
+<li>[P.2.1] <strong>Platform:</strong> Mobile application and Wearable controller (e.g., watch).</li>
+</ul>
+<h2 id="p3-schedule-and-milestones">P.3 Schedule and milestones</h2>
+<p>[P.3.1] The project schedule is driven by a strict deadline for the initial release.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Milestone</th>
+<th style="text-align: left;">Date</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Release v1</strong></td>
+<td style="text-align: left;">2026-01-28</td>
+<td style="text-align: left;">Deadline to submit the first operational version of the system (Release v1).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Final Release</strong></td>
+<td style="text-align: left;">2026-02-01</td>
+<td style="text-align: left;">Deadline to submit the final project.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="p4-tasks-and-deliverables">P.4 Tasks and deliverables</h2>
+<p>[P.4.1] The project tasks are focused on achieving the submission deadline with the following key outcomes:  </p>
+<ul>
+<li>
+<p><strong>Tasks:</strong>  </p>
+<ul>
+<li>Develop and validate the project.  </li>
+<li>Perform system verification.</li>
+</ul>
+</li>
+<li>
+<p><strong>Deliverables:</strong>  </p>
+<ul>
+<li><strong>Release v1:</strong> The first executable version of the system.  </li>
+<li><strong>Final Project:</strong> Complete project documentation and source code.</li>
+</ul>
+</li>
+</ul>
+<h2 id="p5-required-technology-elements">P.5 Required technology elements</h2>
+<h2 id="p6-risk-and-mitigation-analysis">P.6 Risk and mitigation analysis</h2>
+<ul>
+<li>[P.6.1] <em>Risk:</em> High false alarm rates could lead to distrust or fines. <em>Mitigation:</em> Strict requirement for &lt;1% false alarm rate</li>
+</ul>
+<h2 id="p7-requirements-process-and-report">P.7 Requirements process and report</h2>
+<ul>
+<li>[P.7.1] <strong>Process:</strong> The requirements were generated using an LLM (Gemini) based on an interview synthesis.  </li>
+<li>[P.5.2] <strong>Status:</strong> 10 questions were asked and 10 were answered.</li>
+</ul>
+        </div>
+        
+    </div>
+</body>
+</html>
