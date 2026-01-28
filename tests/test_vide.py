@@ -17,14 +17,14 @@ FOLDERS = ['goals', 'environment', 'project', 'system']
 def check_files():
     has_error = False
     
-    print("🔍 Démarrage des tests de qualité...\n")
+    print("Démarrage des tests de qualité...\n")
 
     for folder in FOLDERS:
         dir_path = os.path.join(CONTENT_ROOT, folder)
         
         # 1. Vérifier si le dossier existe
         if not os.path.exists(dir_path):
-            print(f"❌ ERREUR : Le dossier '{folder}' est introuvable.")
+            print(f"ERREUR : Le dossier '{folder}' est introuvable.")
             has_error = True
             continue
             
@@ -32,7 +32,7 @@ def check_files():
         
         # 2. Vérifier si le dossier est vide
         if not files:
-            print(f"⚠️  ATTENTION : Le dossier '{folder}' ne contient aucun fichier Markdown.")
+            print(f"ATTENTION : Le dossier '{folder}' ne contient aucun fichier Markdown.")
             # On ne met pas forcément en erreur ici, sauf si c'est obligatoire pour vous
         
         # 3. Vérifier le contenu de chaque fichier
@@ -43,18 +43,18 @@ def check_files():
                 content = f.read().strip() # .strip() enlève les espaces et sauts de ligne inutiles
                 
             if not content:
-                print(f"❌ ERREUR : Le fichier '{folder}/{filename}' est VIDE.")
+                print(f"ERREUR : Le fichier '{folder}/{filename}' est VIDE.")
                 has_error = True
             else:
-                print(f"✅ OK : {folder}/{filename} ({len(content)} caractères)")
+                print(f"OK : {folder}/{filename} ({len(content)} caractères)")
 
     print("\n--------------------------------")
     
     if has_error:
-        print("⛔ ECHEC DES TESTS : Corrigez les erreurs ci-dessus.")
+        print("ECHEC DES TESTS : Corrigez les erreurs ci-dessus.")
         sys.exit(1) # C'est ce code '1' qui dit à GitHub d'arrêter tout de suite
     else:
-        print("✨ SUCCÈS : Tous les fichiers sont valides.")
+        print("SUCCÈS : Tous les fichiers sont valides.")
         sys.exit(0)
 
 if __name__ == "__main__":

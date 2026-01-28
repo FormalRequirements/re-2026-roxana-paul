@@ -29,8 +29,13 @@ jobs:
       - name: Installer les dépendances (Pour les tests)
         run: pip install markdown jinja2
 
-      - name: Exécuter les tests
-        run: python tests/test_quality.py
+      # Vérifie qu'aucun fichier n'est vide
+      - name: Test 1 - Fichiers vides
+        run: python tests/test_vide.py
+
+      # Vérifie qu'un titre2 est suivit d'un paragraphe
+      - name: Test 2 - Structure (Titre + Paragraphe)
+        run: python tests/test_structure.py
 
   build:
     runs-on: ubuntu-latest
