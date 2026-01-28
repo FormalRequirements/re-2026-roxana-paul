@@ -1,12 +1,22 @@
-name: Générer Documentation PEGS
+name: Déployer Documentation PEGS
 
 on:
   workflow_dispatch:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-doc:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -14,7 +24,7 @@ jobs:
       - name: Installer Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9' 
+          python-version: '3.9'
 
       - name: Installer les dépendances
         run: pip install markdown jinja2
@@ -22,9 +32,23 @@ jobs:
       - name: Lancer le script de génération
         run: python build.py
 
-      - name: Sauvegarder l'artefact HTML
-        uses: actions/upload-artifact@v4
+      - name: Préparer pour le web
+        run: |
+          mkdir public
+          mv document_pegs.html public/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: Ma-Documentation-PEGS
-          path: document_pegs.html 
-          retention-days: 5
+          path: './public'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Mettre en ligne sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
