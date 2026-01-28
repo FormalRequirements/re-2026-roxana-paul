@@ -1,4 +1,4 @@
 # P. Project
 
 ## P.1 Roles and personnel
-* **Requirements Engineers:** Roxana & Paul.
+- **Requirements Engineers:** Roxana & Paul.
