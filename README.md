@@ -70,6 +70,32 @@ Ce fichier contient la version rendue et consultable des exigences.
 La documentation HTML est également accessible directement en ligne à l’adresse suivante :
 [https://formalrequirements.github.io/re-2026-roxana-paul/](https://formalrequirements.github.io/re-2026-roxana-paul/)
 
+Tests automatisés
+
+Lors de l’exécution du workflow, deux tests automatiques sont réalisés afin de garantir la qualité et la cohérence de la documentation :
+
+Vérification des fichiers non vides : aucun fichier présent dans le dossier content ne doit être vide.
+
+Vérification de la structure de certains fichiers : dans une liste de fichiers prédéfinis, chaque titre de niveau 2 (##) doit être suivi d’un paragraphe.
+
+Les fichiers concernés par ce second test sont :
+
+projet/project_03.md
+
+projet/project_04.md
+
+goals/goals_01.md
+
+goals/goals_03.md
+
+goals/goals_07.md
+
+environment/environment_03.md
+
+system/system_01.md
+
+system/system_02.md
+
 ## Auteurs
 
 * **Crosnier Paul**

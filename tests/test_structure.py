@@ -5,8 +5,8 @@ import sys
 #              CONFIGURATION
 # ==========================================
 FILES_TO_CHECK = [
-    "projet/project_03.md",
-    "projet/project_04.md",
+    "project/project_03.md",
+    "project/project_04.md",
     "goals/goals_01.md",
     "goals/goals_03.md",
     "goals/goals_07.md",
@@ -17,84 +17,98 @@ FILES_TO_CHECK = [
 # ==========================================
 
 def check_structure():
-    # 1. Calcul dynamique des chemins pour trouver le dossier 'content'
-    #    (Fonctionne que l'on lance le script depuis la racine ou depuis tests/)
-    current_script_dir = os.path.dirname(os.path.abspath(__file__)) # Dossier tests/
-    project_root = os.path.dirname(current_script_dir)              # Racine du projet
-    content_root = os.path.join(project_root, 'content')            # Dossier content/
+    # 1. Calcul des chemins
+    current_script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_script_dir)
+    content_root = os.path.join(project_root, 'content')
 
-    has_error = False
-    print(f"🔍 Démarrage du test de structure sur {len(FILES_TO_CHECK)} fichier(s)...\n")
+    global_error = False
+    print(f"Démarrage du test strict (H2 + Paragraphe) sur {len(FILES_TO_CHECK)} fichier(s)...\n")
 
     for relative_path in FILES_TO_CHECK:
         filepath = os.path.join(content_root, relative_path)
-        
-        # A. Vérification de l'existence du fichier
+        file_error = False # Pour savoir si CE fichier a échoué
+
+        # A. Vérification de l'existence
         if not os.path.exists(filepath):
             print(f"ERREUR : Le fichier '{relative_path}' est introuvable.")
-            has_error = True
+            global_error = True
             continue
 
-        # B. Analyse du contenu ligne par ligne
+        # B. Lecture du fichier
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
         except Exception as e:
             print(f"ERREUR : Impossible de lire '{relative_path}'. ({e})")
-            has_error = True
+            global_error = True
             continue
 
-        last_header = None      # Le dernier titre rencontré
-        line_num_header = 0     # Le numéro de ligne du titre
-        content_found = False   # A-t-on trouvé du texte après ce titre ?
+        last_header = None      
+        line_num_header = 0     
+        content_found = False   
+        
+        # NOUVEAU : On track si on a trouvé au moins un H2 valide
+        has_valid_h2_block = False 
 
         for i, line in enumerate(lines):
             stripped = line.strip()
             current_line_num = i + 1
             
-            # On ignore les lignes vides
             if not stripped:
                 continue
 
-            # Cas 1 : C'est un TITRE (commence par #)
+            # Cas 1 : C'est un TITRE
             if stripped.startswith('#'):
-                # Si on avait un titre en attente et qu'on n'a rien trouvé avant ce nouveau titre
+                # Vérifier si le titre précédent était vide (Règle générale)
                 if last_header is not None and not content_found:
                     print(f"VIDE : Dans '{relative_path}' (Ligne {line_num_header})")
                     print(f"Le titre '{last_header}' n'est suivi d'aucun contenu.")
-                    has_error = True
+                    file_error = True
+                    global_error = True
 
-                # On mémorise ce nouveau titre et on reset le compteur
+                # Reset pour le nouveau titre
                 last_header = stripped
                 line_num_header = current_line_num
                 content_found = False
             
-            # Cas 2 : C'est du CONTENU (Texte, liste, image...)
+            # Cas 2 : C'est du CONTENU
             else:
-                # Si on a un titre en mémoire, on valide qu'il a du contenu
                 if last_header is not None:
                     content_found = True
+                    
+                    # --- LA NOUVELLE REGLE ICI ---
+                    # Si le titre au-dessus commence par '##' (mais pas '###')
+                    # Alors on considère que l'exigence est remplie.
+                    if last_header.startswith('##') and not last_header.startswith('###'):
+                        has_valid_h2_block = True
 
-        # Vérification finale pour le TOUT DERNIER titre du fichier
+        # Vérification du tout dernier titre du fichier
         if last_header is not None and not content_found:
             print(f"VIDE : Dans '{relative_path}' (Ligne {line_num_header})")
             print(f"Le dernier titre '{last_header}' n'est suivi d'aucun contenu.")
-            has_error = True
+            file_error = True
+            global_error = True
 
-        # Si aucune erreur n'a été marquée pour ce fichier spécifique
-        if not has_error: 
-            # Note: ceci affiche OK même si un AUTRE fichier a échoué avant, 
-            # mais ça permet de voir ce qui va bien.
+        # --- VERIFICATION FINALE POUR CE FICHIER ---
+        if not has_valid_h2_block:
+            print(f"MANQUANT : '{relative_path}' ne contient aucun Titre 2 (##) avec du contenu.")
+            print(f"Règle : Chaque fichier listé doit avoir au moins une exigence de niveau 2.")
+            file_error = True
+            global_error = True
+
+        # Si tout est OK pour ce fichier précis
+        if not file_error: 
             print(f"OK : '{relative_path}'")
 
     print("\n--------------------------------")
     
-    if has_error:
-        print("ECHEC : La structure de certains fichiers est invalide (Titres vides).")
-        sys.exit(1) # Retourne une erreur à GitHub Actions
+    if global_error:
+        print("ECHEC : Certains fichiers ne respectent pas les règles.")
+        sys.exit(1)
     else:
-        print("SUCCÈS : Tous les fichiers testés sont conformes.")
-        sys.exit(0) # Retourne un succès
+        print("SUCCÈS : Structure validée.")
+        sys.exit(0)
 
 if __name__ == "__main__":
     check_structure()
