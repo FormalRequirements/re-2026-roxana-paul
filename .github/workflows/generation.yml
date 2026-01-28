@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Récupérer le code
@@ -26,10 +26,28 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Installer les dépendances
+      - name: Installer les dépendances (Pour les tests)
         run: pip install markdown jinja2
 
-      - name: Lancer le script de génération
+      - name: Exécuter les tests
+        run: python tests/test_quality.py
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test  
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Installer les dépendances (Pour le build)
+        run: pip install markdown jinja2
+
+      - name: Générer le site
         run: python build.py
 
       - name: Préparer pour le web
@@ -37,7 +55,7 @@ jobs:
           mkdir public
           mv document_pegs.html public/index.html
 
-      - name: Upload artifact
+      - name: Sauvegarder l'artefact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './public'
